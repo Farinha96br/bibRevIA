@@ -13,8 +13,6 @@ LLM served with [Ollama](https://ollama.com), using the criteria in
 | File | Purpose |
 |------|---------|
 | `tableFilter.ipynb` | Notebook pipeline: classifies rows of an Excel table (`tabela.xlsx`). |
-| `bibFilter.py` | CLI pipeline: classifies entries of a `.bib` file. |
-| `bibParser.py` | BibTeX → dict parser used by `bibFilter.py`. |
 | `criteria.txt` | Inclusion/exclusion criteria fed to the model. |
 | `filteringImage.def` | Apptainer image definition (Ollama + Python + JupyterLab). |
 | `tabela.xlsx` | Input table of papers (`title`, `abstract`, …). |
@@ -35,7 +33,7 @@ apptainer build filteringImage.sif filteringImage.def
 The image is based on `ollama/ollama` and adds Python, JupyterLab, and a named
 Jupyter kernel (`bibRevIA (Ollama)`). Rebuild whenever you change `filteringImage.def`.
 
-## 2a. Notebook workflow (`tableFilter.ipynb`)
+## 2. Run the pipeline (`tableFilter.ipynb`)
 
 Classifies the rows of `tabela.xlsx` and writes two new columns per model:
 `IA suggestion - <model>` (the verdict) and `IA comment - <model>` (the reason).
@@ -72,24 +70,9 @@ Execute the cells top-to-bottom:
 5. **Main loop** — classifies up to `MAX_entries` rows (set to `None` for all).
 6. **Save** — writes `tabela_with_IA_<model>.xlsx`.
 
-## 2b. CLI workflow (`bibFilter.py`)
-
-Classifies a `.bib` file and writes a verdict CSV. Resumable: re-running skips
-entries already present in the output CSV.
-
-```bash
-apptainer exec --nv filteringImage.sif \
-    python3 bibFilter.py input.bib criteria.txt verdict.csv --model qwen2.5:7b
-```
-
-- `input.bib` — bibliography to filter.
-- `criteria.txt` — filtering criteria.
-- `verdict.csv` — output (`key, title, accepted, reason`).
-- `--model` — any Ollama model name, including `hf.co/<user>/<repo>:<quant>`.
-
 ## Configuration
 
-- **Model** — in the notebook, set `MODEL`. Pull GGUF models straight from
+- **Model** — in the config cell, set `MODEL`. Pull GGUF models straight from
   HuggingFace with `hf.co/<user>/<repo>:<quantization>`, e.g.
   `hf.co/unsloth/DeepSeek-R1-Distill-Llama-70B-GGUF:Q4_K_M` or
   `hf.co/bartowski/Qwen2.5-7B-Instruct-GGUF:Q4_K_M`. The repo must contain GGUF
