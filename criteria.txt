@@ -1,0 +1,19 @@
+Goal: select papers for a survey on High-Performance Computing (HPC) applied to seismic inversion. Judge each paper using ONLY its title and abstract.
+
+INCLUDE when the abstract contains BOTH (the paper does NOT need to focus on
+HPC — it is enough that an HPC/computational topic is mentioned or cited):
+  1. Full Waveform Inversion (FWI) or Reverse Time Migration (RTM); AND
+  2. at least one HPC / computational topic mentioned, for example:
+       - hardware: multi-core CPUs, GPUs/GPGPUs, APUs, TPUs, tensor cores, FPGAs, Cerebras, or other hardware accelerators;
+       - parallel-programming / performance frameworks: CUDA, HIP, OpenMP, OpenACC, MPI, OpenCL, Kokkos, SYCL, Devito;
+       - memory, storage and data movement: checkpointing, compression, out-of-core, decimation, I/O (input/output), disk/storage usage;
+       - reduced/mixed precision: mixed, half, or low precision;
+       - general: parallelization, performance, or scalability.
+
+EXCLUDE when the abstract is missing either requirement, or when it is:
+  - medical imaging;
+  - machine learning;
+  - seismic processing unrelated to FWI/RTM;
+  - a case study on a specific geological site;
+  - 1D or 2D only (2.5D is allowed);
+  - not the actual abstract of an article (proceedings/conference listings, tables of contents, abstracts with no real article content).

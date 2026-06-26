@@ -1,0 +1,19 @@
+Bootstrap: docker
+From: ollama/ollama
+
+%post
+    apt-get update && apt-get install -y python3 python3-pip curl
+    pip3 install --no-cache-dir --break-system-packages \
+        jupyterlab pandas numpy openpyxl requests
+    # Register a named kernel so it is easy to pick in the VSCode kernel list.
+    python3 -m ipykernel install --name bibrevia --display-name "bibRevIA (Ollama)"
+
+%runscript
+    # Start Ollama, wait until it is up, then launch JupyterLab.
+    # Run with:  apptainer run --nv filteringImage.sif
+    ollama serve &
+    until curl -sf http://localhost:11434/api/tags > /dev/null 2>&1; do sleep 1; done
+    # A real token is required: with an empty token Jupyter keeps XSRF on and
+    # rejects kernel creation (VSCode would spin forever). Connect in VSCode
+    # using this token.  Override at run time with: ... filteringImage.sif --ServerApp.token=YOURTOKEN
+    exec jupyter lab --no-browser --ip=0.0.0.0 --port=8888 --ServerApp.token=bibrevia "$@"
